@@ -17,11 +17,12 @@ impl Word {
         Self { word, count }
     }
 }
-
+static symbols: [char;4] = [',','.','!','?'];
 fn main() {
     println!("Enter the text to display the word count or type [quite:] to exit.");
     let mut input = String::new();
     let mut words: Vec<Word> = Vec::new();
+    //let symbols: [char;4] = [',','.','!','?'];
     io::stdin().read_line(&mut input).unwrap();
 
     if input.ends_with('\n') {
@@ -39,7 +40,10 @@ fn main() {
 
 fn parse(text: &String, words: &mut Vec<Word>) {
     let text_low = text.to_lowercase().clone();
-    for text_word in text_low.split(" ") {
+    for mut text_word in text_low.split(" ") {
+        if text_word.chars().any(|c| symbols.contains(&c)){
+            text_word = &text_word[0..text_word.len()-1];
+        }
         if !words.iter().any(|word| word.word.to_lowercase().eq(text_word)){
             words.push(Word::new(String::from(text_word), 0));
         }
